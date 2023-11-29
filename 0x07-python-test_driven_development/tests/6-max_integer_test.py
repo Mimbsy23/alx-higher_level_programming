@@ -2,64 +2,51 @@
 """Unittest for max_integer([..])
 """
 import unittest
-max_integer = _import_('6-max_integer').max_integer
+max_integer = __import__('6-max_integer').max_integer
 
+class TestMaxInt(unittest.TestCase):
 
-class TestMaxInteger(unittest.TestCase):
-    def test_max(self):
+    """run test with python3 -m unittest -v tests.6-max_integer_test"""
 
-        """Test for maximum integer in a list"""
+    def test_module_docstring_len(self):
+        moduleDoc = __import__('6-max_integer').__doc__
+        self.assertTrue(len(moduleDoc) > 1)
 
-        self.assertEqual(max_integer([1, 2, 3]), 3)
+    def test_func_docstring_len(self):
+        functionDoc = __import__('6-max_integer').max_integer.__doc__
+        self.assertTrue(len(functionDoc) > 1)
 
-    def test_single_elem(self):
+    def test_signed_unsigned_mixed_ints_floats(self):
+        self.assertEqual(max_integer([0]), 0)
+        self.assertEqual(max_integer([1, 2, 3, 4]), 4)
+        self.assertEqual(max_integer([1, 2, 3, -4]), 3)
+        self.assertEqual(max_integer([-16.5, -2.5, -1]), -1)
+        self.assertEqual(max_integer([7.1, -1.9, 1, 0]), 7.1)
+        self.assertEqual(max_integer([{7, 9.1}, {2}, {3}]), {7, 9.1})
 
-        """Test for single element in list"""
+    def test_strings_list(self):
+        self.assertEqual(max_integer("081"), '8')
+        self.assertEqual(max_integer("temitope"), 't')
+        self.assertEqual(max_integer(['t', 'e', 'm', 'i', 't', 'o', 'p', 'e']), 't')
+        self.assertEqual(max_integer(["sharon", 'x']), 'x')
 
-        self.assertEqual(max_integer([1]), 1)
+    def test_lists(self):
+        self.assertEqual(max_integer([[1, 2], [1, 3]]), [1, 3])
 
-    def test_empty_list(self):
+    def test_on_errors(self):
+        with self.assertRaises(TypeError):
+            max_integer({1, 2}, {3, 4, 5})
+        with self.assertRaises(TypeError):
+            max_integer({1, 2, 3, 4, 5})
+        with self.assertRaises(TypeError):
+            max_integer([-10, 0.5, "str", {1, 2}])
+        with self.assertRaises(TypeError):
+            max_integer([None, True])
 
-        """Test empty list"""
+    def test_with_none_data(self):
+        self.assertIsNone(max_integer([]), None)
+        self.assertIsNone(max_integer(), None)
+        self.assertIsNone(max_integer([None]), None)
 
-        self.assertEqual(max_integer([]), None)
-
-    def test_same_list_elem(self):
-
-        """Test for the same element in a list"""
-
-        self.assertEqual(max_integer([1, 1, 1]), 1)
-
-    def test_neg_float_elem(self):
-
-        """Test for negative list of flaot type"""
-
-        self.assertEqual(max_integer([-1, -10, -4]), -1)
-
-    def test_string(self):
-        """Function test string argument"""
-        self.assertEqual(max_integer("hey"), "y")
-
-    def test_float(self):
-
-        """Function test float argument"""
-
-        self.assertEqual(max_integer([2.4, 0.5, 4.5]), 4.5)
-
-    def test_list_string(self):
-
-        """test list containing string types"""
-
-        self.assertEqual(max_integer(["cherry", "pawpaw", "orange"]), "pawpaw")
-
-    def test_for_none(self):
-
-        """test if the list is None"""
-
-        self.assertEqual(max_integer([None]), None)
-
-    def test_empty_str(self):
-
-        """Test for empty string"""
-
-        self.assertEqual(max_integer(""), None)
+if __name__ == "__main__":
+    unittest.main()
